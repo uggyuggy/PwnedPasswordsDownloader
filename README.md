@@ -66,6 +66,12 @@ This step on my server takes around 30 / 60 minutes.
 
 
 
+Downloading a local copy instead of requesting the remote API may be helpful to:
+
+- be used in restricted environments without a permanent access to Internet
+- not be dependent of the network or of the availability access of the remote API
+- etc...
+
 ## Prerequisites
 
 - Require 21 GB of free space to store downloaded files
@@ -197,7 +203,12 @@ $ du -hs .
 $ echo -n "password123" | sha1sum |  tr [:lower:] [:upper:]
 CBFDAC6008F9CAB4083784CBD1874F76618D2A97  -
 $ zgrep CBFDAC6008F9CAB4083784CBD1874F76618D2A97 /mnt/disk/HIBP/CBFDA.gz
+CBFDAC6008F9CAB4083784CBD1874F76618D2A97:248071
 ```
+
+The password  `password123` has leaked 248071 times
+
+
 
 - Or use this kind of wrapper (to possibly be improved)
 
@@ -238,11 +249,10 @@ $ ./check.sh "correcthorsebatterystaple"
 
 
 
-Same result as requesting the remote API over the network:
+Same result as requesting the remote API over the network 👌:
 
 ```
- 👉 curl -s https://api.pwnedpasswords.com/range/BFD36 | grep 17727EAB0E800E62A776C76381DEFBC4145
+$ curl -s https://api.pwnedpasswords.com/range/BFD36 | grep 17727EAB0E800E62A776C76381DEFBC4145
 17727EAB0E800E62A776C76381DEFBC4145:216
-
 ```
 
