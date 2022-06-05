@@ -54,27 +54,29 @@ So there is not even "code" to be downloaded from this repo.. which is only a `R
 
 ## Information
 
-In short this is what we are doing here
-
-- Create a list of all URLs that contains sha1 hashes (using `crunch` and `sed`)
-
-This step takes only few seconds and are needed only once. (Could even be included here, but why not "build" it yourself)
-
-- Download all those 1 048 576 files with the HTTP client `aria2`
-- Once each small file is downloaded, it apply small optional modifications
-  - Add CR at the end of the file
-  - Add the 5 digit prefix into the file itself
-  - Compress each file
-
-This step on my server takes around 30 / 60 minutes.
-
-
 
 Downloading a local copy instead of requesting the remote API may be helpful to:
 
 - be used in restricted environments without a permanent access to Internet
 - not be dependent of the network or of the availability access of the remote API
 - etc...
+
+In short this is what we are doing here:
+
+- Create a list of all URLs that contains sha1 hashes (using `crunch` and `sed`)
+
+This step takes only few seconds and are needed only once. (Could even be included here, but why not "build" it yourself)
+
+- Download all those 1 048 576 files with the HTTP client `aria2`
+Once each small file is downloaded, it apply small optional modifications
+  - Add CR at the end of the file
+  - Add the 5 digit prefix into the file itself
+  - Compress each file
+
+This download step on my server takes around 30 / 60 minutes.
+
+
+
 
 ## Prerequisites
 
@@ -87,16 +89,15 @@ $ du -s .
 
 
 
-- Generate all the 5 Hex digit combinations
+- Generate all the 5 Hex digit combinations with `crunch` (or any other tool/language you like and can do it as fast as crunch)
 
 ​          16^5  =  1048576
-
-with `crunch` (or any other tool/language you like and can do it as fast as crunch)
 
 > crunch - generate wordlists from a character set
 
 ```
 $ sudo apt-get install crunch
+
 $ crunch 5 5  0123456789ABCDEF > out
 Crunch will now generate the following amount of data: 6291456 bytes
 6 MB
@@ -104,8 +105,10 @@ Crunch will now generate the following amount of data: 6291456 bytes
 0 TB
 0 PB
 Crunch will now generate the following number of lines: 1048576 
+
 $ wc -l out
 1048576 out
+
 $ shuf -n 5 out
 8584C
 77908
@@ -118,6 +121,7 @@ $ shuf -n 5 out
 
 ```
 $ sed 's|^|https://api.pwnedpasswords.com/range/|g' out > urls.txt
+
 $ shuf -n 5 urls.txt
 https://api.pwnedpasswords.com/range/C32A3
 https://api.pwnedpasswords.com/range/E8C0E
